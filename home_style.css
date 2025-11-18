@@ -62,7 +62,7 @@ main#content {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
+  background: rgb(193 16 16 / 42%);
   color: #fff;
   border: none;
   width: 44px;
@@ -130,3 +130,4 @@ footer {
   display: flex;
   justify-content: center;
 }
+
