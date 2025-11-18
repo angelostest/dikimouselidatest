@@ -48,7 +48,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
+  background: rgb(213 10 10 / 35%);
   color: #fff;
   border: none;
   width: 44px;
@@ -97,3 +97,4 @@
     aspect-ratio: 4/3;
   }
 }
+
