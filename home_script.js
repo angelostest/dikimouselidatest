@@ -13,15 +13,6 @@ fetch('partials/layout.html')
     requestAnimationFrame(() => {
       const main = document.getElementById('content');
 
-      // Δημιουργία δυναμικού περιεχομένου
-      main.innerHTML = `
-        <section class="home-intro">
-          <h2>Καλώς ήρθατε στην αρχική σελίδα!</h2>
-          <p>Απολαύστε τα Pokémon sliders μας.</p>
-        </section>
-
-        <div id="slider-container"></div>
-      `;
 
       // Δημιουργούμε το slider μέσα στο slider-container
       const sliderContainer = document.getElementById('slider-container');
@@ -119,4 +110,5 @@ function initSlider() {
 
   startAutoplay();
 }
+
 
