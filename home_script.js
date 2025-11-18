@@ -9,51 +9,27 @@ fetch('partials/layout.html')
     script.src = 'partials/layout_script.js';
     document.body.appendChild(script);
 
-    // Φόρτωση content του home μέσα στο main#content
-    fetch('home.html')
-      .then(res => res.text())
-      .then(content => {
-        const main = document.getElementById('content');
-        main.innerHTML = content;
+const main = document.getElementById('content');
+fetch('home.html')
+  .then(res => res.text())
+  .then(html => {
+    main.innerHTML = html;
 
-        // Slider element
-        const slider = document.querySelector('.poke-slider');
-        slider.style.display = 'none'; // κρύβουμε slider μέχρι να φορτώσουν οι εικόνες
+    // Δημιουργούμε τον slider μόνο εδώ
+    const sliderContainer = document.getElementById('slider-container');
+    const slider = document.createElement('section');
+    slider.className = 'poke-slider';
+    slider.innerHTML = `
+      <div class="slides-wrapper"></div>
+      <button class="prev">‹</button>
+      <button class="next">›</button>
+      <div class="dots"></div>
+    `;
+    sliderContainer.appendChild(slider);
 
-        const imageSources = [
-          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
-          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png',
-          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png',
-          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png',
-          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png'
-        ];
+    initSlider(); // τρέχουμε τη λειτουργία του slider
+  });
 
-        // Φορτώνουμε όλες τις εικόνες πρώτα
-        const loadPromises = imageSources.map(src => new Promise(resolve => {
-          const img = new Image();
-          img.src = src;
-          img.onload = resolve;
-          img.onerror = resolve;
-        }));
-const slider = document.createElement('section');
-slider.className = 'poke-slider';
-slider.innerHTML = `
-  <div class="slides-wrapper"></div>
-  <button class="prev" aria-label="Previous slide">‹</button>
-  <button class="next" aria-label="Next slide">›</button>
-  <div class="dots"></div>
-`;
-main.appendChild(slider);
-
-        Promise.all(loadPromises).then(() => {
-          // Τώρα εμφανίζουμε το slider
-          slider.style.display = 'block';
-          initSlider();
-          adjustSliderHeight();
-          window.addEventListener('resize', adjustSliderHeight);
-        });
-      });
-  })
   .catch(err => console.error('Σφάλμα:', err));
 
 
@@ -158,4 +134,5 @@ function adjustSliderHeight(){
     slider.style.height = firstImg.naturalHeight + 'px';
   }
 }
+
 
