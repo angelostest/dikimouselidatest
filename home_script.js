@@ -39,7 +39,7 @@ fetch('partials/layout.html')
       initSlider();
     });
   })
-  .catch(err => console.error('Σφάλμα:', err));
+
 
 
 // ===================
@@ -119,3 +119,4 @@ function initSlider() {
 
   startAutoplay();
 }
+
