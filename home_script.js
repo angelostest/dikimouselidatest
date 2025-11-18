@@ -9,7 +9,7 @@ fetch('partials/layout.html')
     script.src = 'partials/layout_script.js';
     document.body.appendChild(script);
 
-    // Περιεχόμενο home μέσα στο main#content
+    // Εισαγωγή περιεχομένου home στο main#content
     const main = document.getElementById('content');
     main.innerHTML = `
       <h2>Καλωσήρθατε στον κόσμο των Pokémon!</h2>
@@ -93,5 +93,32 @@ function initSlider() {
   slider.addEventListener('mouseenter', stopAutoplay);
   slider.addEventListener('mouseleave', startAutoplay);
 
+  // -------------------- Touch swipe για κινητά --------------------
+  let startX = 0;
+  let isDragging = false;
+
+  slider.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    isDragging = true;
+    stopAutoplay();
+  });
+
+  slider.addEventListener('touchmove', e => {
+    if(!isDragging) return;
+  });
+
+  slider.addEventListener('touchend', e => {
+    if(!isDragging) return;
+    const endX = e.changedTouches[0].clientX;
+    const deltaX = endX - startX;
+
+    if(deltaX > 50) prevSlide();      // swipe δεξιά → προηγούμενο
+    else if(deltaX < -50) nextSlide(); // swipe αριστερά → επόμενο
+
+    isDragging = false;
+    startAutoplay();
+  });
+
+  // Εκκίνηση autoplay
   startAutoplay();
 }
