@@ -16,8 +16,11 @@ fetch('partials/layout.html')
         const main = document.getElementById('content');
         main.innerHTML = content;
 
-        // Φορτώνουμε τις εικόνες πρώτα πριν τρέξει το slider
-        const sliderImages = [
+        // Slider element
+        const slider = document.querySelector('.poke-slider');
+        slider.style.display = 'none'; // κρύβουμε slider μέχρι να φορτώσουν οι εικόνες
+
+        const imageSources = [
           'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
           'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png',
           'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png',
@@ -25,7 +28,8 @@ fetch('partials/layout.html')
           'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png'
         ];
 
-        const loadPromises = sliderImages.map(src => new Promise(resolve => {
+        // Φορτώνουμε όλες τις εικόνες πρώτα
+        const loadPromises = imageSources.map(src => new Promise(resolve => {
           const img = new Image();
           img.src = src;
           img.onload = resolve;
@@ -33,9 +37,9 @@ fetch('partials/layout.html')
         }));
 
         Promise.all(loadPromises).then(() => {
+          // Τώρα εμφανίζουμε το slider
+          slider.style.display = 'block';
           initSlider();
-
-          // Προσαρμογή ύψους για mobile/desktop
           adjustSliderHeight();
           window.addEventListener('resize', adjustSliderHeight);
         });
@@ -43,9 +47,20 @@ fetch('partials/layout.html')
   })
   .catch(err => console.error('Σφάλμα:', err));
 
+
 // ===================
-// Slider JS σε modular συνάρτηση
+// Slider JS
 function initSlider() {
+  const slider = document.querySelector('.poke-slider');
+  const wrapper = slider.querySelector('.slides-wrapper');
+  const dotsContainer = slider.querySelector('.dots');
+  const prevBtn = slider.querySelector('.prev');
+  const nextBtn = slider.querySelector('.next');
+
+  // Καθαρίζουμε τυχόν προηγούμενα slides/dots
+  wrapper.innerHTML = '';
+  dotsContainer.innerHTML = '';
+
   const imageSources = [
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png',
@@ -53,12 +68,6 @@ function initSlider() {
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png',
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png'
   ];
-
-  const slider = document.querySelector('.poke-slider');
-  const wrapper = slider.querySelector('.slides-wrapper');
-  const dotsContainer = slider.querySelector('.dots');
-  const prevBtn = slider.querySelector('.prev');
-  const nextBtn = slider.querySelector('.next');
 
   let current = 0;
   const slides = [];
@@ -71,32 +80,32 @@ function initSlider() {
     const img = document.createElement('img');
     img.src = src;
     img.alt = `Pokémon ${idx + 1}`;
-    if (idx === 0) img.classList.add('active');
+    if(idx === 0) img.classList.add('active');
     wrapper.appendChild(img);
     slides.push(img);
 
     const dot = document.createElement('button');
-    if (idx === 0) dot.classList.add('active');
+    if(idx === 0) dot.classList.add('active');
     dot.addEventListener('click', () => goTo(idx));
     dotsContainer.appendChild(dot);
     dots.push(dot);
   });
 
-  function setActive(index, direction = 'right') {
-    if (index === current) return;
+  function setActive(index, direction='right'){
+    if(index === current) return;
     const prev = slides[current];
     const next = slides[index];
 
-    if (direction === 'right') next.classList.add('enter-from-right');
+    if(direction === 'right') next.classList.add('enter-from-right');
     else next.classList.add('enter-from-left');
 
     prev.classList.remove('active');
-    void next.offsetWidth;
+    void next.offsetWidth; // force reflow
     next.classList.add('active');
 
     setTimeout(() => {
-      next.classList.remove('enter-from-right', 'enter-from-left');
-    }, 650);
+      next.classList.remove('enter-from-right','enter-from-left');
+    },650);
 
     dots[current].classList.remove('active');
     dots[index].classList.add('active');
@@ -104,25 +113,25 @@ function initSlider() {
     current = index;
   }
 
-  function nextSlide() { setActive((current + 1) % slides.length, 'right'); }
-  function prevSlide() { setActive((current - 1 + slides.length) % slides.length, 'left'); }
-  function goTo(i) {
-    setActive(i, i > current ? 'right' : 'left');
+  function nextSlide(){ setActive((current+1)%slides.length,'right'); }
+  function prevSlide(){ setActive((current-1+slides.length)%slides.length,'left'); }
+  function goTo(i){
+    setActive(i,i>current?'right':'left');
     restartAutoplay();
   }
 
-  function startAutoplay() {
+  function startAutoplay(){
     stopAutoplay();
-    autoplayInterval = setInterval(nextSlide, AUTOPLAY_DELAY);
+    autoplayInterval = setInterval(nextSlide,AUTOPLAY_DELAY);
   }
-  function stopAutoplay() {
-    if (autoplayInterval) clearInterval(autoplayInterval);
+  function stopAutoplay(){
+    if(autoplayInterval) clearInterval(autoplayInterval);
     autoplayInterval = null;
   }
-  function restartAutoplay() { stopAutoplay(); startAutoplay(); }
+  function restartAutoplay(){ stopAutoplay(); startAutoplay(); }
 
-  nextBtn.addEventListener('click', () => { nextSlide(); restartAutoplay(); });
-  prevBtn.addEventListener('click', () => { prevSlide(); restartAutoplay(); });
+  nextBtn.addEventListener('click',()=>{ nextSlide(); restartAutoplay(); });
+  prevBtn.addEventListener('click',()=>{ prevSlide(); restartAutoplay(); });
   slider.addEventListener('mouseenter', stopAutoplay);
   slider.addEventListener('mouseleave', startAutoplay);
   slider.addEventListener('focusin', stopAutoplay);
@@ -133,11 +142,10 @@ function initSlider() {
 
 // ===================
 // Προσαρμογή ύψους slider ανάλογα με την πρώτη εικόνα
-function adjustSliderHeight() {
+function adjustSliderHeight(){
   const slider = document.querySelector('.poke-slider');
-  const wrapper = slider.querySelector('.slides-wrapper');
-  const firstImg = wrapper.querySelector('img');
-  if(firstImg){
+  const firstImg = slider.querySelector('.slides-wrapper img');
+  if(firstImg && firstImg.complete){
     slider.style.height = firstImg.naturalHeight + 'px';
   }
 }
