@@ -1,0 +1,106 @@
+/* ----------- Βασικό Layout ----------- */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  background-color: #f4f4f4;
+}
+
+/* Το main μεγαλώνει για να γεμίσει τον χώρο */
+main#content {
+  flex: 1;
+}
+
+/* Κολλημένο footer */
+footer {
+  background-color: #222;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  margin-top: auto;
+}
+
+/* Header */
+header {
+  background-color: #222;
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+  position: relative;
+}
+
+/* Κουμπί μενού */
+header button {
+  position: absolute;
+  right: 20px;
+  top: 40px;
+  background-color: #8b0606;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 50px;
+}
+
+header button:hover {
+  background-color: #666;
+}
+
+/* ----------- Side Menu ----------- */
+#sideMenu {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: #333333e0;
+  overflow-x: hidden;
+  transition: width 0.4s ease, opacity 0.4s ease;
+  padding-top: 60px;
+  opacity: 0;
+  z-index: 1001;
+}
+
+#sideMenu.open {
+  width: 250px;
+  opacity: 1;
+}
+
+#sideMenu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#sideMenu ul li {
+  margin: 65px 0;
+  text-align: center;
+}
+
+#sideMenu ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+#sideMenu ul li a:hover {
+  text-decoration: underline;
+}
+
+#closeMenu {
+  position: absolute;
+  top: 43px;
+  right: 25px;
+  background: none;
+  border: none;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+}
+
+
+
+

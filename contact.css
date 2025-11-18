@@ -1,0 +1,99 @@
+/* ====== contact.css ====== */
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background-color: #222;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+}
+
+main {
+  flex: 1;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h2 {
+  color: #222;
+  border-bottom: 2px solid #ffd54f;
+  padding-bottom: 5px;
+}
+
+.contact-info, .hours, .contact-form {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.contact-info a, .hours a {
+  color: #0078d4;
+  text-decoration: none;
+}
+.contact-info a:hover {
+  text-decoration: underline;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input, textarea {
+  width: 95%;
+  max-width: 500px; /*δική μου προσθήκη*/
+  max-height: 400px; /*δική μου προσθήκη*/
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+button {
+  background-color: #0078d4;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #005fa3;
+}
+
+.status {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+footer {
+  background-color: #222;
+  color: #fff;
+  text-align: center;
+  padding: 15px 10px;
+  margin-top: auto;
+}
+
+footer .back-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: #ffd54f;
+  text-decoration: none;
+}
+footer .back-link:hover {
+  text-decoration: underline;
+}

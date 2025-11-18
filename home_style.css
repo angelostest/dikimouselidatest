@@ -1,0 +1,184 @@
+
+/* ====== Slider styles (slider.css) ====== */
+.poke-slider {
+  position: relative;
+  max-width: 720px;
+  margin: 30px auto;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  background: #111; /* dark bg so images with transparency look nice */
+}
+
+/* viewport for slides */
+.slides-wrapper {
+  position: relative;
+  height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* each image */
+.slides-wrapper img {
+  position: absolute;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 600ms ease, transform 600ms ease;
+  will-change: opacity, transform;
+}
+
+/* active image */
+.slides-wrapper img.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  z-index: 2;
+}
+
+/* subtle incoming translate for smooth feel */
+.slides-wrapper img.enter-from-right { transform: translate(10%, -50%) scale(0.98); }
+.slides-wrapper img.enter-from-left { transform: translate(-90%, -50%) scale(0.98); }
+
+/* arrows */
+.poke-slider .prev,
+.poke-slider .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+.poke-slider .prev { left: 12px; }
+.poke-slider .next { right: 12px; }
+.poke-slider .prev:hover,
+.poke-slider .next:hover { background: rgba(0,0,0,0.7); }
+
+/* dots */
+.poke-slider .dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display:flex;
+  gap: 8px;
+  z-index: 6;
+}
+.poke-slider .dots button {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.35);
+  cursor: pointer;
+}
+.poke-slider .dots button.active {
+  background: #ffd54f; /* εδώ αλλάζεις το χρώμα των κουκίδων κάτω απο τις εικόνες */
+  box-shadow: 0 0 6px rgba(0,0,0,0.4) inset;
+}
+
+/* responsive tweaks */
+@media (max-width: 520px) {
+  .slides-wrapper { height: 320px; }
+  .poke-slider { margin: 16px; }
+  .poke-slider .prev, .poke-slider .next { width: 38px; height: 38px; }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ----------- Δεξί Μενού ----------- */
+.menu {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: #333;
+  overflow-x: hidden;
+  transition: width 0.4s ease, opacity 0.4s ease; /*Δημιουργεί ομαλή κίνηση + ξεθώριασμα*/
+  padding-top: 60px;
+  opacity: 0;
+  z-index: 1001;
+}
+
+.menu.open {
+  width: 250px;
+  opacity: 1;
+}
+
+.menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu ul li {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.menu ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.menu ul li a:hover {
+  text-decoration: underline;
+}
+
+.menu #closeMenu {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+}
+
+/* ----------- Overlay ----------- */
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease;
+  z-index: 1000;
+}
+
+#overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+footer {
+  text-align: center;
+  padding: 10px;
+}
