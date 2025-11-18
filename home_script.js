@@ -1,4 +1,4 @@
-// Φόρτωση του layout
+// -------------------- Φόρτωση layout --------------------
 fetch('partials/layout.html')
   .then(res => res.text())
   .then(html => {
@@ -9,13 +9,12 @@ fetch('partials/layout.html')
     script.src = 'partials/layout_script.js';
     document.body.appendChild(script);
 
-    // Εισαγωγή content στο main#content
+    // Περιεχόμενο home μέσα στο main#content
     const main = document.getElementById('content');
     main.innerHTML = `
-      <div class="home-intro">
-        <h2>Καλωσήρθατε στον κόσμο των Pokémon!</h2>
-        <p>Δείτε τα αγαπημένα σας Pokémon σε ένα όμορφο slider.</p>
-      </div>
+      <h2>Καλωσήρθατε στον κόσμο των Pokémon!</h2>
+      <p>Δείτε τα αγαπημένα σας Pokémon σε ένα όμορφο slider:</p>
+
       <section class="poke-slider" aria-label="Pokémon slider">
         <div class="slides-wrapper"></div>
         <button class="prev" aria-label="Previous slide">‹</button>
@@ -27,18 +26,11 @@ fetch('partials/layout.html')
     // Αρχικοποίηση slider
     initSlider();
   })
-  .catch(err => console.error('Σφάλμα:', err));
+  .catch(err => console.error('Σφάλμα φόρτωσης layout:', err));
 
 
-// ===================
-// Slider JS
+// -------------------- Slider JS --------------------
 function initSlider() {
-  const slider = document.querySelector('.poke-slider');
-  const wrapper = slider.querySelector('.slides-wrapper');
-  const dotsContainer = slider.querySelector('.dots');
-  const prevBtn = slider.querySelector('.prev');
-  const nextBtn = slider.querySelector('.next');
-
   const images = [
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png',
@@ -47,63 +39,59 @@ function initSlider() {
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png'
   ];
 
+  const slider = document.querySelector('.poke-slider');
+  const wrapper = slider.querySelector('.slides-wrapper');
+  const dotsContainer = slider.querySelector('.dots');
+  const prevBtn = slider.querySelector('.prev');
+  const nextBtn = slider.querySelector('.next');
+
   let current = 0;
   const slides = [];
   const dots = [];
-  const AUTOPLAY_DELAY = 3500;
-  let autoplayInterval = null;
+  let autoplay = null;
 
   // Δημιουργία εικόνων & dots
   images.forEach((src, idx) => {
     const img = document.createElement('img');
     img.src = src;
     img.alt = `Pokémon ${idx+1}`;
-    if(idx===0) img.classList.add('active');
+    if(idx === 0) img.classList.add('active');
     wrapper.appendChild(img);
     slides.push(img);
 
     const dot = document.createElement('button');
-    if(idx===0) dot.classList.add('active');
+    if(idx === 0) dot.classList.add('active');
     dot.addEventListener('click', () => goTo(idx));
     dotsContainer.appendChild(dot);
     dots.push(dot);
   });
 
-  function setActive(index, direction='right') {
-    if(index===current) return;
-    const prev = slides[current];
-    const next = slides[index];
-    if(direction==='right') next.classList.add('enter-from-right');
-    else next.classList.add('enter-from-left');
-
-    prev.classList.remove('active');
-    void next.offsetWidth;
-    next.classList.add('active');
-
-    setTimeout(()=> {
-      next.classList.remove('enter-from-right','enter-from-left');
-    },650);
-
+  // -------------------- Λειτουργίες slider --------------------
+  function setActive(idx) {
+    if(idx === current) return;
+    slides[current].classList.remove('active');
+    slides[idx].classList.add('active');
     dots[current].classList.remove('active');
-    dots[index].classList.add('active');
-
-    current=index;
+    dots[idx].classList.add('active');
+    current = idx;
   }
 
-  function nextSlide(){ setActive((current+1)%slides.length,'right'); }
-  function prevSlide(){ setActive((current-1+slides.length)%slides.length,'left'); }
-  function goTo(i){ setActive(i,i>current?'right':'left'); restartAutoplay(); }
+  function nextSlide() { setActive((current+1) % slides.length); }
+  function prevSlide() { setActive((current-1+slides.length) % slides.length); }
+  function goTo(i) { setActive(i); restartAutoplay(); }
 
-  function startAutoplay(){ stopAutoplay(); autoplayInterval=setInterval(nextSlide,AUTOPLAY_DELAY); }
-  function stopAutoplay(){ if(autoplayInterval) clearInterval(autoplayInterval); autoplayInterval=null; }
-  function restartAutoplay(){ stopAutoplay(); startAutoplay(); }
+  function startAutoplay() {
+    stopAutoplay();
+    autoplay = setInterval(nextSlide, 3500);
+  }
+  function stopAutoplay() { if(autoplay) clearInterval(autoplay); }
+  function restartAutoplay() { stopAutoplay(); startAutoplay(); }
 
-  nextBtn.addEventListener('click',()=>{ nextSlide(); restartAutoplay(); });
-  prevBtn.addEventListener('click',()=>{ prevSlide(); restartAutoplay(); });
+  // -------------------- Events --------------------
+  nextBtn.addEventListener('click', () => { nextSlide(); restartAutoplay(); });
+  prevBtn.addEventListener('click', () => { prevSlide(); restartAutoplay(); });
   slider.addEventListener('mouseenter', stopAutoplay);
   slider.addEventListener('mouseleave', startAutoplay);
-  slider.addEventListener('focusin', stopAutoplay);
-  slider.addEventListener('focusout', startAutoplay);
 
   startAutoplay();
 }
