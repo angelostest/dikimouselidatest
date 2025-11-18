@@ -35,6 +35,15 @@ fetch('partials/layout.html')
           img.onload = resolve;
           img.onerror = resolve;
         }));
+const slider = document.createElement('section');
+slider.className = 'poke-slider';
+slider.innerHTML = `
+  <div class="slides-wrapper"></div>
+  <button class="prev" aria-label="Previous slide">‹</button>
+  <button class="next" aria-label="Next slide">›</button>
+  <div class="dots"></div>
+`;
+main.appendChild(slider);
 
         Promise.all(loadPromises).then(() => {
           // Τώρα εμφανίζουμε το slider
@@ -149,3 +158,4 @@ function adjustSliderHeight(){
     slider.style.height = firstImg.naturalHeight + 'px';
   }
 }
+
