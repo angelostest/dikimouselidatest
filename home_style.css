@@ -13,7 +13,8 @@
 .slides-wrapper {
   position: relative;
   width: 100%;
-  height: 100%;
+  /* Αφαιρούμε height: 100%, χρησιμοποιούμε aspect-ratio για responsive */
+  aspect-ratio: 16/9; /* ή ό,τι αναλογία έχουν οι εικόνες */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,4 +92,8 @@
 @media (max-width: 520px) {
   .poke-slider { margin: 16px; }
   .poke-slider .prev, .poke-slider .next { width: 38px; height: 38px; }
+  .slides-wrapper {
+    /* μικρότερο aspect ratio για mobile αν θέλεις */
+    aspect-ratio: 4/3;
+  }
 }
