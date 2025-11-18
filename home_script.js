@@ -4,48 +4,47 @@ fetch('partials/layout.html')
   .then(html => {
     document.getElementById('layout1').innerHTML = html;
 
-    // Φόρτωση layout JS
+    // Φόρτωση του layout JS
     const script = document.createElement('script');
     script.src = 'partials/layout_script.js';
     document.body.appendChild(script);
 
-const main = document.getElementById('content');
-fetch('home.html')
-  .then(res => res.text())
-  .then(html => {
-    main.innerHTML = html;
+    // Εισαγωγή περιεχομένου Home στο <main id="content">
+    requestAnimationFrame(() => {
+      const main = document.getElementById('content');
 
-    // Δημιουργούμε τον slider μόνο εδώ
-    const sliderContainer = document.getElementById('slider-container');
-    const slider = document.createElement('section');
-    slider.className = 'poke-slider';
-    slider.innerHTML = `
-      <div class="slides-wrapper"></div>
-      <button class="prev">‹</button>
-      <button class="next">›</button>
-      <div class="dots"></div>
-    `;
-    sliderContainer.appendChild(slider);
+      // Δημιουργία δυναμικού περιεχομένου
+      main.innerHTML = `
+        <section class="home-intro">
+          <h2>Καλώς ήρθατε στην αρχική σελίδα!</h2>
+          <p>Απολαύστε τα Pokémon sliders μας.</p>
+        </section>
 
-    initSlider(); // τρέχουμε τη λειτουργία του slider
-  });
+        <div id="slider-container"></div>
+      `;
 
+      // Δημιουργούμε το slider μέσα στο slider-container
+      const sliderContainer = document.getElementById('slider-container');
+      const slider = document.createElement('section');
+      slider.className = 'poke-slider';
+      slider.innerHTML = `
+        <div class="slides-wrapper"></div>
+        <button class="prev" aria-label="Previous slide">‹</button>
+        <button class="next" aria-label="Next slide">›</button>
+        <div class="dots"></div>
+      `;
+      sliderContainer.appendChild(slider);
+
+      // Εκκίνηση του slider
+      initSlider();
+    });
+  })
   .catch(err => console.error('Σφάλμα:', err));
 
 
 // ===================
 // Slider JS
 function initSlider() {
-  const slider = document.querySelector('.poke-slider');
-  const wrapper = slider.querySelector('.slides-wrapper');
-  const dotsContainer = slider.querySelector('.dots');
-  const prevBtn = slider.querySelector('.prev');
-  const nextBtn = slider.querySelector('.next');
-
-  // Καθαρίζουμε τυχόν προηγούμενα slides/dots
-  wrapper.innerHTML = '';
-  dotsContainer.innerHTML = '';
-
   const imageSources = [
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png',
@@ -53,6 +52,12 @@ function initSlider() {
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png',
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png'
   ];
+
+  const slider = document.querySelector('.poke-slider');
+  const wrapper = slider.querySelector('.slides-wrapper');
+  const dotsContainer = slider.querySelector('.dots');
+  const prevBtn = slider.querySelector('.prev');
+  const nextBtn = slider.querySelector('.next');
 
   let current = 0;
   const slides = [];
@@ -94,25 +99,15 @@ function initSlider() {
 
     dots[current].classList.remove('active');
     dots[index].classList.add('active');
-
     current = index;
   }
 
   function nextSlide(){ setActive((current+1)%slides.length,'right'); }
   function prevSlide(){ setActive((current-1+slides.length)%slides.length,'left'); }
-  function goTo(i){
-    setActive(i,i>current?'right':'left');
-    restartAutoplay();
-  }
+  function goTo(i){ setActive(i,i>current?'right':'left'); restartAutoplay(); }
 
-  function startAutoplay(){
-    stopAutoplay();
-    autoplayInterval = setInterval(nextSlide,AUTOPLAY_DELAY);
-  }
-  function stopAutoplay(){
-    if(autoplayInterval) clearInterval(autoplayInterval);
-    autoplayInterval = null;
-  }
+  function startAutoplay(){ stopAutoplay(); autoplayInterval = setInterval(nextSlide,AUTOPLAY_DELAY); }
+  function stopAutoplay(){ if(autoplayInterval) clearInterval(autoplayInterval); autoplayInterval = null; }
   function restartAutoplay(){ stopAutoplay(); startAutoplay(); }
 
   nextBtn.addEventListener('click',()=>{ nextSlide(); restartAutoplay(); });
@@ -124,15 +119,3 @@ function initSlider() {
 
   startAutoplay();
 }
-
-// ===================
-// Προσαρμογή ύψους slider ανάλογα με την πρώτη εικόνα
-function adjustSliderHeight(){
-  const slider = document.querySelector('.poke-slider');
-  const firstImg = slider.querySelector('.slides-wrapper img');
-  if(firstImg && firstImg.complete){
-    slider.style.height = firstImg.naturalHeight + 'px';
-  }
-}
-
-
