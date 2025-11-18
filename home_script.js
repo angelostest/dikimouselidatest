@@ -16,8 +16,29 @@ fetch('partials/layout.html')
         const main = document.getElementById('content');
         main.innerHTML = content;
 
-        // Μετά προσθέτουμε slider JS
-        initSlider();
+        // Φορτώνουμε τις εικόνες πρώτα πριν τρέξει το slider
+        const sliderImages = [
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png'
+        ];
+
+        const loadPromises = sliderImages.map(src => new Promise(resolve => {
+          const img = new Image();
+          img.src = src;
+          img.onload = resolve;
+          img.onerror = resolve;
+        }));
+
+        Promise.all(loadPromises).then(() => {
+          initSlider();
+
+          // Προσαρμογή ύψους για mobile/desktop
+          adjustSliderHeight();
+          window.addEventListener('resize', adjustSliderHeight);
+        });
       });
   })
   .catch(err => console.error('Σφάλμα:', err));
@@ -108,4 +129,15 @@ function initSlider() {
   slider.addEventListener('focusout', startAutoplay);
 
   startAutoplay();
+}
+
+// ===================
+// Προσαρμογή ύψους slider ανάλογα με την πρώτη εικόνα
+function adjustSliderHeight() {
+  const slider = document.querySelector('.poke-slider');
+  const wrapper = slider.querySelector('.slides-wrapper');
+  const firstImg = wrapper.querySelector('img');
+  if(firstImg){
+    slider.style.height = firstImg.naturalHeight + 'px';
+  }
 }
