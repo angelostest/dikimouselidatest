@@ -2,7 +2,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-image: url(https://static0.thegamerimages.com/wordpress/wp-content/uploads/2020/10/Pokemon-Pallet-town.jpg?q=50&fit=crop&w=1600&h=900&dpr=1.5);
+  background-image: url("https://static0.thegamerimages.com/wordpress/wp-content/uploads/2020/10/Pokemon-Pallet-town.jpg?q=50&fit=crop&w=1600&h=900&dpr=1.5");
   color: #333;
 }
 
@@ -122,6 +122,7 @@ main#content {
   display: flex;
   justify-content: center;
 }
+
 
 
 
