@@ -115,14 +115,6 @@ main#content {
 }
 
 
-/* ====== Footer ====== */
-footer {
-  text-align: center;
-  padding: 20px;
-  background: #222;
-  color: #fff;
-  margin-top: 180px;
-}
 
 /* ====== Prevent Double Slider ====== */
 #slider-container {
@@ -130,6 +122,7 @@ footer {
   display: flex;
   justify-content: center;
 }
+
 
 
 
